@@ -22,10 +22,11 @@ pipeline {
        stage('Build LMS') {
            steps {
                echo 'LMS Build Started'
-               sh 'cd webapp && npm install && npm run build'
+               sh 'cd webapp && npm install --no-progress --verbose && npm run build'
                echo 'LMS Build Completed'
-           }
-       }
+            }
+        }
+
 
        stage('Publish LMS') {
            steps {
