@@ -34,14 +34,13 @@ pipeline {
                     def ver = pkg.version
                     echo "Version: ${ver}"
 
-                    // Create ZIP file
                     sh "zip -r webapp/lms-${ver}.zip webapp/dist"
 
-                    // Upload file to Nexus (FIXED PATH + FIXED URL)
+                    // Upload to Nexus (Correct Password)
                     sh """
-                    curl -v -u admin:Nnuzair@2912 \
-                    --upload-file ${WORKSPACE}/webapp/lms-${ver}.zip \
-                    http://54.172.35.60:8081/repository/lms/lms-${ver}.zip
+                        curl -v -u admin:Nnuzair@2912 \
+                        --upload-file webapp/lms-${ver}.zip \
+                        http://54.172.35.60:8081/repository/lms/lms-${ver}.zip
                     """
                 }
             }
@@ -52,23 +51,19 @@ pipeline {
                 script {
                     def pkg = readJSON file: 'webapp/package.json'
                     def ver = pkg.version
+
                     echo "Deploying ${ver}"
 
-                    // Download artifact from Nexus
+                    // Download from Nexus (Correct Password)
                     sh """
-                    curl -u admin:lms12345 -X GET \
-                    http://54.172.35.60:8081/repository/lms/lms-${ver}.zip \
-                    --output lms-${ver}.zip
+                        curl -u admin:Nnuzair@2912 -X GET \
+                        "http://54.172.35.60:8081/repository/lms/lms-${ver}.zip" \
+                        --output lms-${ver}.zip
                     """
 
-                    // Clear old files
-                    sh "rm -rf /var/www/html/*"
-
-                    // Unzip downloaded build
+                    sh "sudo rm -rf /var/www/html/*"
                     sh "unzip -o lms-${ver}.zip"
-
-                    // Copy final build to web root
-                    sh "cp -r webapp/dist/* /var/www/html"
+                    sh "sudo cp -r webapp/dist/* /var/www/html"
                 }
             }
         }
