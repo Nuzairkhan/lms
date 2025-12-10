@@ -39,7 +39,7 @@ pipeline {
 
                     // Upload file to Nexus (FIXED PATH + FIXED URL)
                     sh """
-                    curl -v -u admin:lms12345 \
+                    curl -v -u admin:Nnuzair@2912 \
                     --upload-file ${WORKSPACE}/webapp/lms-${ver}.zip \
                     http://54.172.35.60:8081/repository/lms/lms-${ver}.zip
                     """
